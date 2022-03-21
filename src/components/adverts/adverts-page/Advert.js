@@ -16,7 +16,7 @@ export const Advert = ({  name, sale, price, tags, photo }) => {
         </div>
         <ul>
             {tags.map((tag, index)=>{
-                return <li key={`${tag}-index`}>{tag}</li>
+                return <li key={`${tag}-${index}`}>{tag}</li>
             })}
         </ul>
       </div>

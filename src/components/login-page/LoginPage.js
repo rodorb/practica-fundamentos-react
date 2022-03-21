@@ -19,7 +19,7 @@ export const LoginPage = () => {
         rememberCredentials: rememberCredentialsValue || false
     });
     const [error, setError] = useState(null);
-    const [isLoading, setisLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const { email, password, rememberCredentials } = userCredentials;
 
@@ -47,20 +47,20 @@ export const LoginPage = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        let hasError = false;
+        let errorValue = null;
         let redirectTo;
-        setisLoading(true);
+        setIsLoading(true);
         try{
             await AuthService.login(userCredentials);
             onLogin();
             handleRememberCredentialsCheckbox();
             redirectTo = location.state?.redirectTo?.pathname || '/';
         }catch(err){
-            hasError = true;
+            errorValue = err;
         }finally{
-            setisLoading(false);
-            if(hasError){
-                setError(hasError);
+            setIsLoading(false);
+            if(errorValue){
+                setError(errorValue);
             }else{
                 redirectTo && navigate(redirectTo, { replace: true }); 
             }  
