@@ -4,15 +4,15 @@ import { Page } from "../../layout/Page";
 import { Advert } from "../adverts-page/Advert";
 import AdvertsService from "../service/AdvertsService";
 
-/**
- *   - TODO:  Detalle del anuncio cuyo id es recogido de la URL. Mostrará la foto del
- *      anuncio o un placeholder en su lugar si no existe foto.
- *   - TODO:  Si el anuncio no existe deberia redirigirnos al NotFoundPage.
- *   - TODO:  Botón para poder borrar el anuncio. Antes de borrar mostar una
- *      confirmación al usuario (algo más elaborado que un window.confirm,
- *      jugando con el estado de React). Tras el borrado debería redireccionar
- *      al listado de anuncios.
- */
+
+//  DONE??:  Detalle del anuncio cuyo id es recogido de la URL. Mostrará la foto del
+//         anuncio o un placeholder en su lugar si no existe foto.
+//  DONE:  Si el anuncio no existe deberia redirigirnos al NotFoundPage.
+//  TODO:  Botón para poder borrar el anuncio. Antes de borrar mostar una
+//         confirmación al usuario (algo más elaborado que un window.confirm,
+//         jugando con el estado de React). Tras el borrado debería redireccionar
+//         al listado de anuncios.
+ 
 export const AdvertPage = ()=>{
     const { advertId } = useParams() || '';
     const [ advert, setAdvert ] = useState(null);
@@ -21,7 +21,7 @@ export const AdvertPage = ()=>{
 
     useEffect(() => {
         (async () => {
-            let errorValue = false;
+            let errorValue = null;
             setIsLoading(true);
             try {
                 const advertData = await AdvertsService.getAdvert(advertId);
@@ -45,7 +45,7 @@ export const AdvertPage = ()=>{
     }
 
     return (
-        <Page title="Welcome to Nodepop">
+        <Page title="Advert Detail">
             <div>
                 
                 {isLoading && (
