@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../../../shared/components/ui-components/Button";
 import { Page } from "../../layout/Page";
 import AdvertsService from "../service/AdvertsService";
 import { Advert } from "./Advert";
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+
 
 // AdvertsPage:
 // DONE: o Listado de anuncios. Cada anuncio presentará nombre, precio, si es
@@ -39,14 +42,35 @@ const EmptyAdvertsPage = () => {
 }
 export const AdvertsPage = ()=>{
     const [adverts, setAdverts] = useState([]);
+    const [ availableTags, setAvailableTags ] = useState(["lifestyle","mobile","motor","work"])
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    //TODO: estado de slider, si se saca a  otro componente, mover tambien este estado
+    const [ sliderState , setSliderState ] = useState({
+            min: 1,
+            max: 100,
+            step: 10,
+            value: 1
+    });
+
+    //TODO: Filtros, Añadir un Botón para resetear los filtros y volver a mostrar todos los productos
+    const [filters, setFilters] = useState({
+        nameFilter : 'Todos', //input de texto
+        onSaleFilter: 'Todos',//radio buttons ['Todos', 'En venta', 'En compra']
+        priceFilter: 'Todos', //slider (si es el string 'todos' muestra todos, si mueve el slider a partir del minimo y maximo mostrar los articulos)
+        tagsFilter: 'Todos', //multiselect, donde se podrán seleccionar uno o más tags de los devueltos por el API   
+    });
+
+    const { min, max, step ,value } = sliderState;
+    //TODO: estado de slider, si se saca a  otro componente, mover tambien este estado
     useEffect(()=>{
         (async ()=>{
             let errorValue = null;
             setIsLoading(true);
             try {
               const advertsData = await AdvertsService.getAllAdvertisements();
+              const tagsData = await AdvertsService.getTags();
+              setAvailableTags(tagsData); 
               setAdverts(advertsData);  
             } catch (error) {
                 errorValue = error;
@@ -59,22 +83,94 @@ export const AdvertsPage = ()=>{
         })();
 
     }, []);
+
+
+    //TODO: funciones controladoras del cambio de slider
+    const onSliderChange = (value) => {
+        console.log(value);
+        setSliderState((oldSliderStateValues) =>{
+            return {...oldSliderStateValues, value}
+        });
+    };
+    
+    const onSliderInputChange = (defaultValue)=> (event) => {
+        const evtTarget = event.target;
+        setSliderState((oldSliderStateValues) =>{
+            return { ...oldSliderStateValues, [evtTarget.name]:  +evtTarget.value || defaultValue };
+        });
+    };
+
+
+    const labelStyle = { minWidth: '60px', display: 'inline-block' };
+    const inputStyle = { marginBottom: '10px' };
     return (
         <Page title="Welcome to Nodepop">
             <div>
                 {adverts.length > 0?(
-                    <ul>
-                        {adverts.map((advert) => {
-                            return (
-                                <li key={advert.id}>
-                                    <Link to={`/adverts/${advert.id}`}>
-                                        <Advert {...advert}/>
-                                    </Link>
-                                </li>
-                            )
-                             
-                        })}
-                    </ul>
+                    <Fragment>
+                        {/* //TODO:  PARTE DE FILTROS - PODRIA IR TODO A UN COMPONENTE */}
+                            <div style={{ width: 600, margin: 50 }}>
+                                    <h1>ZONA DE FLITROS</h1>
+                                    <label style={labelStyle}>Precio Minimo: </label>
+                                    <input
+                                        type="number"
+                                        name="min"
+                                        value={min}
+                                        onChange={onSliderInputChange(1)}
+                                        style={inputStyle}
+                                        />
+                                    <br />
+
+                                    <label style={labelStyle}>Precio Maximo: </label>
+                                    <input
+                                        type="number"
+                                        name="max"
+                                        value={max}
+                                        onChange={onSliderInputChange(100)}
+                                        style={inputStyle}
+                                        />
+                                    <br />
+
+                                    <label style={labelStyle}>Step: </label>
+                                    <input
+                                        type="number"
+                                        name="step"
+                                        value={step}
+                                        onChange={onSliderInputChange(1)}
+                                        style={inputStyle}
+                                        />
+                                    <br />
+                                    <br />
+
+                                    <label style={labelStyle}>Precio máximo: </label>
+                                    <span>{value}</span>
+                                    <br />
+                                    <br />
+
+                                    <Slider
+                                        value={value}
+                                        min={min}
+                                        max={max}
+                                        step={step}
+                                        onChange={onSliderChange}
+                                    />
+                            </div>
+                            {/* //TODO: FIN  PARTE DE FILTROS - PODRIA IR TODO A UN COMPONENTE */}
+
+
+                            <ul>
+                                {adverts.map((advert) => {
+                                    return (
+                                        <li key={advert.id}>
+                                            <Link to={`/adverts/${advert.id}`}>
+                                                <Advert {...advert} />
+                                            </Link>
+                                        </li>
+                                    );
+
+                                })}
+                            </ul>
+                        </Fragment>
                     ): <EmptyAdvertsPage/> }
 
 
