@@ -46,22 +46,29 @@ export const AdvertsPage = ()=>{
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     //TODO: estado de slider, si se saca a  otro componente, mover tambien este estado
-    const [ sliderState , setSliderState ] = useState({
-            min: 1,
-            max: 100,
-            step: 10,
-            value: 1
-    });
+    // const [ sliderState , setSliderState ] = useState({
+    //         min: 1,
+    //         max: 100,
+    //         step: 10,
+    //         value: 1
+    // });
 
     //TODO: Filtros, Añadir un Botón para resetear los filtros y volver a mostrar todos los productos
     const [filters, setFilters] = useState({
         nameFilter : 'Todos', //input de texto
-        onSaleFilter: 'Todos',//radio buttons ['Todos', 'En venta', 'En compra']
-        priceFilter: 'Todos', //slider (si es el string 'todos' muestra todos, si mueve el slider a partir del minimo y maximo mostrar los articulos)
-        tagsFilter: 'Todos', //multiselect, donde se podrán seleccionar uno o más tags de los devueltos por el API   
+        onSaleFilter: 'Todos',//radio buttons ['Todos', 'En venta', 'Se compra']
+        priceFilter: {
+            min: 1,
+            max: 100,
+            step: 10,
+            value: 1
+    }   , //slider ( si mueve el slider mostrar los productos que se cumplan con que sean igual o mayor al precio seleccionado)
+        tagsFilter: [], //multiselect, donde se podrán seleccionar uno o más tags de los devueltos por el API   
     });
 
-    const { min, max, step ,value } = sliderState;
+    const { min, max, step, value } = filters.priceFilter;
+    const { nameFilter, onSaleFilter, priceFilter, tagsFilter } = filters;
+    const ADVERT_TYPES = [ 'En venta', 'Se compra' ];
     //TODO: estado de slider, si se saca a  otro componente, mover tambien este estado
     useEffect(()=>{
         (async ()=>{
@@ -88,18 +95,33 @@ export const AdvertsPage = ()=>{
     //TODO: funciones controladoras del cambio de slider
     const onSliderChange = (value) => {
         console.log(value);
-        setSliderState((oldSliderStateValues) =>{
-            return {...oldSliderStateValues, value}
+        setFilters((oldFilterValue) =>{
+            return {...oldFilterValue, priceFilter : {...oldFilterValue.priceFilter, value }}
         });
     };
     
     const onSliderInputChange = (defaultValue)=> (event) => {
         const evtTarget = event.target;
-        setSliderState((oldSliderStateValues) =>{
-            return { ...oldSliderStateValues, [evtTarget.name]:  +evtTarget.value || defaultValue };
+        setFilters((oldFilterValue) =>{
+            return {...oldFilterValue, priceFilter : {...oldFilterValue.priceFilter, [evtTarget.name]:  +evtTarget.value || defaultValue }};
         });
     };
 
+
+    const onFilterChange = (event)=>{
+        const evtTarget = event?.target;
+        const filterKey = evtTarget?.name;
+         
+        setFilters((oldFilterValue)=>{
+            const filterValue = filterKey === 'tagsFilter'?  
+            Array.from(evtTarget?.options).filter((e)=> e.selected)?.map(o=> o.value) : evtTarget.value;
+            return{
+                ...oldFilterValue,
+                [filterKey] : filterValue
+            }
+        })
+
+    }
 
     const labelStyle = { minWidth: '60px', display: 'inline-block' };
     const inputStyle = { marginBottom: '10px' };
@@ -110,50 +132,81 @@ export const AdvertsPage = ()=>{
                     <Fragment>
                         {/* //TODO:  PARTE DE FILTROS - PODRIA IR TODO A UN COMPONENTE */}
                             <div style={{ width: 600, margin: 50 }}>
-                                    <h1>ZONA DE FLITROS</h1>
-                                    <label style={labelStyle}>Precio Minimo: </label>
-                                    <input
-                                        type="number"
-                                        name="min"
-                                        value={min}
-                                        onChange={onSliderInputChange(1)}
-                                        style={inputStyle}
-                                        />
-                                    <br />
+                                    <h1>ZONA DE FILTROS</h1>
+                                    {/* FILTRO POR NOMBRE */}
+                                    <label>Nombre anuncio:</label>
+                                    <input type="text" name="nameFilter" id="nameFilter" onChange={onFilterChange} />
+                                    {/* FILTRO POR TIPO DE ANUNCIO COMPRA/VENTA */}
+                                    {ADVERT_TYPES.map((adType, idx)=>(
+                                        <div key={idx} className="form-check">
+                                        <label>
+                                            <input
+                                                type="radio"
+                                                name="onSaleFilter"
+                                                value={adType}
+                                                checked={onSaleFilter === adType} 
+                                                onChange={onFilterChange}
+                                            />
+                                            {adType}
+                                        </label>
+                                    </div>
+                                    ))}
 
-                                    <label style={labelStyle}>Precio Maximo: </label>
-                                    <input
-                                        type="number"
-                                        name="max"
-                                        value={max}
-                                        onChange={onSliderInputChange(100)}
-                                        style={inputStyle}
-                                        />
-                                    <br />
+                                    {/* FILTRO POR PRECIO */}
+                                    <div className="price-filter">
+                                        <label style={labelStyle}>Precio Minimo: </label>
+                                        <input
+                                            type="number"
+                                            name="min"
+                                            value={min}
+                                            onChange={onSliderInputChange(1)}
+                                            style={inputStyle}
+                                            />
+                                        <br />
 
-                                    <label style={labelStyle}>Step: </label>
-                                    <input
-                                        type="number"
-                                        name="step"
-                                        value={step}
-                                        onChange={onSliderInputChange(1)}
-                                        style={inputStyle}
-                                        />
-                                    <br />
-                                    <br />
+                                        <label style={labelStyle}>Precio Maximo: </label>
+                                        <input
+                                            type="number"
+                                            name="max"
+                                            value={max}
+                                            onChange={onSliderInputChange(100)}
+                                            style={inputStyle}
+                                            />
+                                        <br />
 
-                                    <label style={labelStyle}>Precio máximo: </label>
-                                    <span>{value}</span>
-                                    <br />
-                                    <br />
+                                        <label style={labelStyle}>Step: </label>
+                                        <input
+                                            type="number"
+                                            name="step"
+                                            value={step}
+                                            onChange={onSliderInputChange(1)}
+                                            style={inputStyle}
+                                            />
+                                        <br />
+                                        <br />
 
-                                    <Slider
-                                        value={value}
-                                        min={min}
-                                        max={max}
-                                        step={step}
-                                        onChange={onSliderChange}
-                                    />
+                                        <label style={labelStyle}>A partir de: </label>
+                                        <span> {value} €</span>
+                                        <br />
+                                        <br />
+
+                                        <Slider
+                                            value={value}
+                                            min={min}
+                                            max={max}
+                                            step={step}
+                                            onChange={onSliderChange}
+                                        />  
+                                    </div>
+
+                                    {/* FILTRO POR TAGS */}
+                                    <label htmlFor="tagsFilter">Tags:</label>
+                                    <select name="tagsFilter" id="tagsFilter" multiple  onChange={onFilterChange}>
+                                        {availableTags.map((tag, idx)=>(
+                                            <option key={idx} value={tag}>{tag}</option>
+                                        ))}
+                                    </select>
+                                    
                             </div>
                             {/* //TODO: FIN  PARTE DE FILTROS - PODRIA IR TODO A UN COMPONENTE */}
 
