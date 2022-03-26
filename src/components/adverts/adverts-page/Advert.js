@@ -9,10 +9,9 @@ export const Advert = ({  name, sale, price, tags, photo }) => {
       </div>
       <div className="right">
         <div className="advert-header">
-          <span className="advert-name">{name}</span>
-          <span className="advert-price">{price}</span>
-          <span className="advert-sale">{sale? 'En venta': 'Se compra'}</span>
-          <span className="advert-separator">·</span>
+          <p className="advert-name">{name}</p>
+          <p className="advert-price">{price}</p>
+          <p className="advert-sale">{sale? 'En venta': 'Se compra'}</p>
         </div>
         <ul>
             {tags.map((tag, index)=>{

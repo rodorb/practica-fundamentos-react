@@ -58,6 +58,7 @@ export const AdvertsPage = ()=>{
         nameFilter : 'Todos', //input de texto
         onSaleFilter: 'Todos',//radio buttons ['Todos', 'En venta', 'Se compra']
         priceFilter: {
+            isFiltered: false,
             min: 1,
             max: 100,
             step: 10,
@@ -68,7 +69,7 @@ export const AdvertsPage = ()=>{
 
     const { min, max, step, value } = filters.priceFilter;
     const { nameFilter, onSaleFilter, priceFilter, tagsFilter } = filters;
-    const ADVERT_TYPES = [ 'En venta', 'Se compra' ];
+    const ADVERT_TYPES = [ 'En venta', 'Se compra', 'Todos' ];
     //TODO: estado de slider, si se saca a  otro componente, mover tambien este estado
     useEffect(()=>{
         (async ()=>{
@@ -96,7 +97,7 @@ export const AdvertsPage = ()=>{
     const onSliderChange = (value) => {
         console.log(value);
         setFilters((oldFilterValue) =>{
-            return {...oldFilterValue, priceFilter : {...oldFilterValue.priceFilter, value }}
+            return {...oldFilterValue, priceFilter : {...oldFilterValue.priceFilter, value, isFiltered: true }}
         });
     };
     
@@ -122,13 +123,34 @@ export const AdvertsPage = ()=>{
         })
 
     }
+    const filteredAdverts = adverts?.filter((advert)=>{
+        const activeFilters = [];
+        if(nameFilter !== 'Todos'){
+            activeFilters.push(advert?.name?.includes(nameFilter));
+        }
+        if(onSaleFilter !== 'Todos'){
+            onSaleFilter === ADVERT_TYPES[0] ?  
+                activeFilters.push(advert?.sale === true) : 
+                activeFilters.push(advert?.sale === false);
+        }
+
+        if(priceFilter?.isFiltered){
+            activeFilters.push(advert.price >= priceFilter.value);
+        }
+
+        if(tagsFilter?.length > 0){
+            activeFilters.push(tagsFilter.every((tag)=> { return advert?.tags?.includes(tag) }));
+        }
+
+        return activeFilters.every(af => af);
+    })
 
     const labelStyle = { minWidth: '60px', display: 'inline-block' };
     const inputStyle = { marginBottom: '10px' };
     return (
         <Page title="Welcome to Nodepop">
             <div>
-                {adverts.length > 0?(
+                {adverts.length > 0 ?(
                     <Fragment>
                         {/* //TODO:  PARTE DE FILTROS - PODRIA IR TODO A UN COMPONENTE */}
                             <div style={{ width: 600, margin: 50 }}>
@@ -212,18 +234,19 @@ export const AdvertsPage = ()=>{
 
 
                             <ul>
-                                {adverts.map((advert) => {
+                                {filteredAdverts.map((advert) => {
                                     return (
                                         <li key={advert.id}>
                                             <Link to={`/adverts/${advert.id}`}>
                                                 <Advert {...advert} />
                                             </Link>
+                                            <br/><br/><br/><br/>
                                         </li>
                                     );
 
                                 })}
                             </ul>
-                        </Fragment>
+                    </Fragment>
                     ): <EmptyAdvertsPage/> }
 
 

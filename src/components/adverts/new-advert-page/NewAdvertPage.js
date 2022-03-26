@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../../../shared/components/ui-components/Button";
 import { FormField } from "../../../shared/components/ui-components/FormField";
 import { Page } from "../../layout/Page";
@@ -26,7 +27,10 @@ export const NewAdvertPage = ()=>{
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [ availableTags, setAvailableTags ] = useState(["lifestyle","mobile","motor","work"])
-    const { name, sale, price, tags, photo } = newAdvertData
+    const { name, sale, price, tags, photo } = newAdvertData;
+    const navigate = useNavigate();
+    const location = useLocation();
+
     useEffect(() => {
         (async()=>{
             let errorValue;
@@ -44,13 +48,58 @@ export const NewAdvertPage = ()=>{
     }, []);
 
     const handleInputChange = (event) =>{
-        // setNewAdvertData((advertData)=>{
-        //     return { ...advertData, tags: tagsData };
-        // });
+        const evtTarget = event?.target;
+        const key = evtTarget?.name;
+        let value = evtTarget.value
+        if(key === 'tags'){
+            value =  Array.from(evtTarget?.options).filter((e)=> e.selected)?.map(o=> o.value); 
+        } 
+
+        if(key === 'sale'){
+            value =  JSON.parse(value); 
+        } 
+
+        if(key === 'price'){
+            value = value === ""? "" :  Number(Math.round(value * 100) / 100); 
+        }
+        
+        if(key === 'photo'){
+            value = event?.target?.files[0];
+        }
+            
+        setNewAdvertData((oldAdvertData)=>{
+            
+            return{
+                ...oldAdvertData,
+                [key] : value
+            }
+        })
     }
 
-    const handleSubmit = (event) =>{
+    const handleSubmit = async (event) =>{
+
         event.preventDefault();
+        let errorValue = null;
+        let redirectTo;
+        setIsLoading(true);
+        
+        try{
+            const formData = new FormData();
+            for ( var key in newAdvertData ) {
+                formData.append(key, newAdvertData[key]);
+            }
+            const createdAdvert =  await AdvertsService.createAdvert(formData);
+            redirectTo = `/adverts/${createdAdvert?.id}`;
+        }catch(err){
+            errorValue = err;
+        }finally{
+            setIsLoading(false);
+            if(errorValue){
+                setError(errorValue);
+            }else{
+                redirectTo && navigate(redirectTo, { replace: true }); 
+            }  
+        }
     }
 
     const buttonDisabled = 
@@ -74,6 +123,7 @@ export const NewAdvertPage = ()=>{
                 />
                 <FormField
                     type="number"
+                    step='0.01'
                     name="price"
                     label="Precio"
                     className="loginForm-field"
@@ -83,7 +133,7 @@ export const NewAdvertPage = ()=>{
                 <label>
 
                     { availableTags.length > 0 && (
-                        <select multiple={true} onChange={handleInputChange}>
+                        <select  name="tags" id="tags" multiple={true} onChange={handleInputChange}>
                             {availableTags.map((tag, idx)=>{
                                 return <option key={idx} value={tag}>{tag}</option>
                             })}
@@ -96,9 +146,10 @@ export const NewAdvertPage = ()=>{
                 <div className="radio">
                     <label>
                         <input
+                            name="sale"
                             type="radio"
-                            value="Male"
-                            checked={!sale}
+                            value="false"
+                            checked={sale === false}
                             onChange={handleInputChange}
                         />
                         Se compra
@@ -107,17 +158,19 @@ export const NewAdvertPage = ()=>{
                 <div className="radio">
                     <label>
                         <input
+                            name="sale"
                             type="radio"
-                            value="Female"
-                            checked={sale}
+                            value="true"
+                            checked={sale === true}
                             onChange={handleInputChange}
                         />
                         En venta
                     </label>
                 </div>
                 <input
+                    name="photo"
                     type="file"
-                    onChange={event => console.log(event.target.files[0])}
+                    onChange={handleInputChange}
                 />
 
                 <Button
