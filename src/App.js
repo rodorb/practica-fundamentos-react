@@ -36,8 +36,12 @@ function App({isInitiallyLogged}) {
               <Route path='/adverts/new' element={<NewAdvertPage/>}/>
           </Route>
           <Route path="/" element={<Navigate to="/adverts" />} />
-          <Route path='/404' element={<NotFoundPage/>}/>
-          <Route path='*' element={<Navigate to="/404"/>}/>
+          <Route path='/404' element={  <Layout/>}>
+            <Route index element={<NotFoundPage/>}/>
+          </Route>
+          
+          <Route path='*' element={<Navigate  to="/404"/>}/>
+          <Route path='/adverts/*' element={<Navigate  to="/404"/>}/>
         </Routes>
       </AuthContextProvider>
     </div>

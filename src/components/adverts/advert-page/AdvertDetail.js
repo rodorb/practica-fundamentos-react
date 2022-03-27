@@ -1,11 +1,14 @@
 import React, { Fragment, useState } from 'react';
 import { Photo } from '../../layout/Photo';
 import ButtonBootstrap from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import { MyVerticallyCenteredModal } from '../../../shared/components/ui-components/Modal';
 import AdvertsService from '../service/AdvertsService';
 import {  useNavigate } from 'react-router-dom';
 import './AdvertDetails.css'
 import defaultPhoto from '../../../assets/photo-not-found.jpg';
+import Toast from 'react-bootstrap/Toast';
+
 
 export const AdvertDetail = ({  name, sale, price, tags, photo, id }) => {
   const [showModal, setShowModal] = useState(false);
@@ -71,15 +74,18 @@ export const AdvertDetail = ({  name, sale, price, tags, photo, id }) => {
         
       </article>
       {isLoading && (
-        <div>
-          ...Loading - TODO: Spinner should be shown here
-        </div>
+       <Spinner animation="border" role="status" variant="warning" >
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       )}
 
       {error && (
-        <div onClick={setError(null)} className="loginPage-error">
-          {error.message} - TODO: An error notification should be shown here
-        </div>
+        <Toast bg="danger">
+        <Toast.Header>
+          <strong className="me-auto">Error</strong>
+        </Toast.Header>
+        <Toast.Body>Se ha producido un error en la aplicación.</Toast.Body>
+      </Toast>
       )}
     </Fragment>
   );

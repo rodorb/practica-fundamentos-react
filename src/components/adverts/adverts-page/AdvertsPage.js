@@ -1,12 +1,14 @@
 import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "../../../shared/components/ui-components/Button";
 import { Page } from "../../layout/Page";
 import AdvertsService from "../service/AdvertsService";
 import './AdvertsPage.css';
 import { Advert } from "./Advert";
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import Spinner from 'react-bootstrap/Spinner';
+import Toast from 'react-bootstrap/Toast';
+
 
 
 // AdvertsPage:
@@ -34,11 +36,13 @@ import 'rc-slider/assets/index.css';
 // preferencias deberían permanecer guardadas aunque cerremos
 // el navegador.
 const EmptyAdvertsPage = () => {
-    return (<div style={{ textAlign: 'center' }}>
-    <p>No adverts to show!</p>
-    <Button as={Link} to="/advers/new" variant="primary">
-        Be the first create one!
-    </Button>
+    return (
+    <div style={{ textAlign: 'center', fontWeight: 'bolder', fontSize: '5rem', color: 'blue', display: 'flex'
+        , justifyContent:'center', alignItems: 'center',   margin: '14rem' }}>
+        <p>No adverts to show!</p>
+        <Link style={{ textAlign: 'center', fontWeight: 'bolder', fontSize: '5rem', color: 'red' }}  as={Link} to="/adverts/new" variant="primary">
+            Be the first create one!
+        </Link>
     </div>)
 }
 export const AdvertsPage = ()=>{
@@ -151,7 +155,8 @@ export const AdvertsPage = ()=>{
     return (
         <Page title="Welcome to Nodepop">
             <div className="advert-page-content">
-                {adverts.length > 0 ?(
+                {!isLoading && !error &&<Fragment>
+                {adverts.length > 0  ?(
                     <Fragment>
                         {/* //TODO:  PARTE DE FILTROS - PODRIA IR TODO A UN COMPONENTE */}
                             <div className="filter-zone">
@@ -252,17 +257,22 @@ export const AdvertsPage = ()=>{
                     </Fragment>
                     ): <EmptyAdvertsPage/> }
 
+                </Fragment>}
+                
 
                 {isLoading && (
-                <div>
-                ...Loading - TODO: Spinner should be shown here
-                </div>
+                <Spinner animation="border" role="status" variant="warning" >
+                <span className="visually-hidden">Loading...</span>
+                </Spinner>
                 )}
 
-                {error && (
-                    <div onClick={setError(null)} className="loginPage-error">
-                    {error.message} - TODO: An error notification should be shown here
-                    </div>
+                {error && !isLoading && (
+                    <Toast bg="danger">
+                    <Toast.Header>
+                      <strong className="me-auto">Error</strong>
+                    </Toast.Header>
+                    <Toast.Body>Se ha producido un error en la aplicación.</Toast.Body>
+                  </Toast>
                 )}
             </div>
         </Page>

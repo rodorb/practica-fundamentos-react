@@ -62,7 +62,13 @@ export const NewAdvertPage = ()=>{
         } 
 
         if(key === 'price'){
-            value = value === ""? "" :  Number(Math.round(value * 100) / 100); 
+            const regex = /^\d+.\d{1,2}/;
+            const regexMatch = regex.exec(value)?.[0];
+            if(regexMatch && (value.includes(',') || value.includes('.'))){
+               value = regexMatch; 
+            }
+            
+            value = value === ""? "" : parseFloat(parseFloat(value)?.toFixed(2));  //Number(Math.round(value * 100) / 100); 
         }
         
         if(key === 'photo'){
@@ -139,7 +145,7 @@ export const NewAdvertPage = ()=>{
                         <label>
                             <span>Etiquetas</span>
                             { availableTags.length > 0 && (
-                                <select class="form-select" size="3" aria-label="multiple select example" name="tags" id="tags" multiple={true} onChange={handleInputChange}>
+                                <select className="form-select" size="3" aria-label="multiple select example" name="tags" id="tags" multiple={true} onChange={handleInputChange}>
                                     {availableTags.map((tag, idx)=>{
                                         return <option key={idx} value={tag}>{tag}</option>
                                     })}
@@ -148,7 +154,7 @@ export const NewAdvertPage = ()=>{
                             }
                         </label>
                     
-                        <div class="form-check">
+                        <div className="form-check">
                             <label>Tipo anuncio</label>
                             <div className="radio">
                                 <label>
@@ -179,9 +185,9 @@ export const NewAdvertPage = ()=>{
                     
 
                     <div className="mb-3">
-                        <label for="formFile" class="form-label">Selecciona una foto para el anuncio</label>
+                        <label htmlFor="formFile" className="form-label">Selecciona una foto para el anuncio</label>
                         <input
-                            class="form-control"
+                            className="form-control"
                             name="photo"
                             type="file"
                             id="formFile"

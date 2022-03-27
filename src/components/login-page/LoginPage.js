@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../../shared/components/ui-components/Button";
 import { FormField } from "../../shared/components/ui-components/FormField";
 import Storage from "../../shared/utils/Storage";
 import { useAuthContext } from "../auth/AuthContext"
@@ -8,6 +7,9 @@ import AuthService from '../auth/AuthService'
 import { Page } from "../layout/Page";
 import './LoginPage.css'
 import ButtonBootstrap from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+import Toast from 'react-bootstrap/Toast';
+
 
 
 const credentialsCachedSessionName = 'credentialsCached';
@@ -117,14 +119,19 @@ export const LoginPage = () => {
 
           {isLoading && (
             <div>
-              ...Loading - TODO: Spinner should be shown here
+             <Spinner animation="border" role="status" variant="warning" >
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
             </div>
           )}
 
           {error && (
-            <div onClick={setError(null)} className="loginPage-error">
-              {error.message} - TODO: An error notification should be shown here
-            </div>
+            <Toast bg="danger">
+            <Toast.Header>
+              <strong className="me-auto">Error</strong>
+            </Toast.Header>
+            <Toast.Body>Se ha producido un error en la aplicación.</Toast.Body>
+          </Toast>
           )}
 
         </div>

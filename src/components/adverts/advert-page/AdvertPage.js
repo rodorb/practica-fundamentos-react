@@ -3,6 +3,8 @@ import { Navigate, useParams } from "react-router-dom";
 import { Page } from "../../layout/Page";
 import AdvertsService from "../service/AdvertsService";
 import { AdvertDetail } from "./AdvertDetail";
+import Spinner from 'react-bootstrap/Spinner';
+import Toast from 'react-bootstrap/Toast';
 
 
 //  DONE??:  Detalle del anuncio cuyo id es recogido de la URL. Mostrará la foto del
@@ -49,17 +51,20 @@ export const AdvertPage = ()=>{
             <Fragment>
                 
                 {isLoading && (
-                <div>
-                ...Loading - TODO: Spinner should be shown here
-                </div>
+               <Spinner animation="border" role="status" variant="warning" >
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
                 )}
                 { advert && !isLoading && <AdvertDetail {...advert} />}
 
 
                 {error && (
-                    <div onClick={setError(null)} className="loginPage-error">
-                    {error.message} - TODO: An error notification should be shown here
-                    </div>
+                    <Toast bg="danger">
+                    <Toast.Header>
+                      <strong className="me-auto">Error</strong>
+                    </Toast.Header>
+                    <Toast.Body>Se ha producido un error en la aplicación.</Toast.Body>
+                  </Toast>
                 )}
             </Fragment>
         </Page>

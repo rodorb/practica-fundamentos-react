@@ -12,6 +12,7 @@ export const  MyVerticallyCenteredModal = ({ modalTitle, modalBody, onAccept, on
     return (
         <Fragment>
             <ModalBootstrap
+            centered={true}
             show={true}
             onHide={handleClose}
             backdrop="static"
