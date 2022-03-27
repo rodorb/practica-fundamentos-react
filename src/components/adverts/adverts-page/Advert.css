@@ -1,0 +1,20 @@
+.advert {
+    padding: 1rem;
+    width: 20rem;
+    height: 20rem;
+    margin: 0.5rem;
+    background-color: rgb(218, 203, 253);
+}
+
+.advert-name {
+    font-size: 2rem;
+}
+
+.advert:hover {
+    background-color: gold;
+}
+
+.advert.bordered {
+    border-color: rgb(0, 0, 0);
+    border-style: solid;
+}

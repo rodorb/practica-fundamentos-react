@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "../../../shared/components/ui-components/Button";
 import { Page } from "../../layout/Page";
 import AdvertsService from "../service/AdvertsService";
+import './AdvertsPage.css';
 import { Advert } from "./Advert";
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -126,7 +127,7 @@ export const AdvertsPage = ()=>{
     const filteredAdverts = adverts?.filter((advert)=>{
         const activeFilters = [];
         if(nameFilter !== 'Todos'){
-            activeFilters.push(advert?.name?.includes(nameFilter));
+            activeFilters.push(advert?.name?.toLowerCase().includes(nameFilter.toLowerCase()));
         }
         if(onSaleFilter !== 'Todos'){
             onSaleFilter === ADVERT_TYPES[0] ?  
@@ -145,34 +146,37 @@ export const AdvertsPage = ()=>{
         return activeFilters.every(af => af);
     })
 
-    const labelStyle = { minWidth: '60px', display: 'inline-block' };
+    const labelStyle = { minWidth: '60px', display: 'block', fontWeight: 'bold' };
     const inputStyle = { marginBottom: '10px' };
     return (
         <Page title="Welcome to Nodepop">
-            <div>
+            <div className="advert-page-content">
                 {adverts.length > 0 ?(
                     <Fragment>
                         {/* //TODO:  PARTE DE FILTROS - PODRIA IR TODO A UN COMPONENTE */}
-                            <div style={{ width: 600, margin: 50 }}>
-                                    <h1>ZONA DE FILTROS</h1>
+                            <div className="filter-zone">
+                                    <h2>Filtrar anuncios</h2>
                                     {/* FILTRO POR NOMBRE */}
-                                    <label>Nombre anuncio:</label>
+                                    <label style={labelStyle}>Nombre:</label>
                                     <input type="text" name="nameFilter" id="nameFilter" onChange={onFilterChange} />
                                     {/* FILTRO POR TIPO DE ANUNCIO COMPRA/VENTA */}
-                                    {ADVERT_TYPES.map((adType, idx)=>(
-                                        <div key={idx} className="form-check">
-                                        <label>
-                                            <input
-                                                type="radio"
-                                                name="onSaleFilter"
-                                                value={adType}
-                                                checked={onSaleFilter === adType} 
-                                                onChange={onFilterChange}
-                                            />
-                                            {adType}
-                                        </label>
+                                    <div style={{paddingBottom: "1rem", paddingTop: "1rem"}}>
+                                       {ADVERT_TYPES.map((adType, idx)=>(
+                                            <div key={idx}>
+                                                <label>
+                                                    <input
+                                                        type="radio"
+                                                        name="onSaleFilter"
+                                                        value={adType}
+                                                        checked={onSaleFilter === adType} 
+                                                        onChange={onFilterChange}
+                                                    />
+                                                    {adType}
+                                                </label>
+                                            </div>
+                                        ))} 
                                     </div>
-                                    ))}
+                                    
 
                                     {/* FILTRO POR PRECIO */}
                                     <div className="price-filter">
@@ -184,7 +188,7 @@ export const AdvertsPage = ()=>{
                                             onChange={onSliderInputChange(1)}
                                             style={inputStyle}
                                             />
-                                        <br />
+                                        
 
                                         <label style={labelStyle}>Precio Maximo: </label>
                                         <input
@@ -194,7 +198,7 @@ export const AdvertsPage = ()=>{
                                             onChange={onSliderInputChange(100)}
                                             style={inputStyle}
                                             />
-                                        <br />
+                                        
 
                                         <label style={labelStyle}>Step: </label>
                                         <input
@@ -204,13 +208,12 @@ export const AdvertsPage = ()=>{
                                             onChange={onSliderInputChange(1)}
                                             style={inputStyle}
                                             />
-                                        <br />
-                                        <br />
+                                        
+                                        
 
-                                        <label style={labelStyle}>A partir de: </label>
-                                        <span> {value} €</span>
-                                        <br />
-                                        <br />
+                                        <label style={labelStyle}>A partir de: 
+                                            <span style={ {fontSize: '1.2rem', fontWeight: 'bolder'}}> {value} €</span>
+                                        </label>
 
                                         <Slider
                                             value={value}
@@ -222,7 +225,7 @@ export const AdvertsPage = ()=>{
                                     </div>
 
                                     {/* FILTRO POR TAGS */}
-                                    <label htmlFor="tagsFilter">Tags:</label>
+                                    <label style={labelStyle} htmlFor="tagsFilter">Etiquetas:</label>
                                     <select name="tagsFilter" id="tagsFilter" multiple  onChange={onFilterChange}>
                                         {availableTags.map((tag, idx)=>(
                                             <option key={idx} value={tag}>{tag}</option>
@@ -233,19 +236,19 @@ export const AdvertsPage = ()=>{
                             {/* //TODO: FIN  PARTE DE FILTROS - PODRIA IR TODO A UN COMPONENTE */}
 
 
-                            <ul>
+                            <div id="ad">
                                 {filteredAdverts.map((advert) => {
                                     return (
-                                        <li key={advert.id}>
+                                        <div key={advert.id}>
                                             <Link to={`/adverts/${advert.id}`}>
                                                 <Advert {...advert} />
                                             </Link>
-                                            <br/><br/><br/><br/>
-                                        </li>
+                                            
+                                        </div>
                                     );
 
                                 })}
-                            </ul>
+                            </div>
                     </Fragment>
                     ): <EmptyAdvertsPage/> }
 

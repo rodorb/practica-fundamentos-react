@@ -1,0 +1,31 @@
+.advert-page-content {
+    display: flex;
+}
+
+.filter-zone {
+    min-height: calc(100vh - 5rem);
+    background-color: aliceblue;
+    padding: 1rem;
+    width: 20rem;
+}
+
+#ad {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    position: relative;
+    margin: 5rem;
+}
+
+#ad a {
+    text-decoration: none;
+    color: black;
+    font-size: larger;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#ad a:hover {
+    color: blue;
+}

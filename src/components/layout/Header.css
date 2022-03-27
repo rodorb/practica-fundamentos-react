@@ -1,35 +1,73 @@
 .header {
-  align-items: center;
-  display: flex;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background: black;
+    height: 5rem;
+    z-index: 10;
+    min-width: 320px;
 }
 
 .header-logo {
-  align-items: center;
-  background-color: transparent;
-  border-radius: 9999px;
-  color: rgba(29, 161, 242, 1);
-  display: inline-flex;
-  height: 48px;
-  justify-content: center;
-  transition: background-color 0.2s;
-  width: 48px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin: 1rem;
 }
 
-.header-logo:hover {
-  background-color: rgba(29, 161, 242, 0.1);
+.header-logo span {
+    font-weight: 200;
+}
+
+.react-link {
+    text-decoration: none;
+    color: white;
+}
+
+.react-link:hover {
+    color: goldenrod;
 }
 
 .header-nav {
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
+    flex: 1 0;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    max-width: unset;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    background: transparent
 }
 
-.header-nav .active {
-  color: green;
+.custom-nav-link {
+    height: 100%;
+    font-size: 1.2rem;
+    font-weight: bolder;
+    align-items: center;
+    padding: 1.2rem;
+    transition: all ease-in 0.15s;
+    justify-content: center;
+    display: flex;
 }
 
-.header-button {
-  width: 144px;
-  margin-left: 10px;
+.custom-nav-link:hover {
+    background: goldenrod;
+    color: black;
+}
+
+.active {
+    background: goldenrod;
+    color: black;
+}
+
+#auth-button {
+    cursor: pointer;
+}
+
+#auth-button:hover {
+    background-color: darkred;
+    color: white;
 }

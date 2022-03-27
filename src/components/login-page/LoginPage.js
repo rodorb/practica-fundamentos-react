@@ -99,7 +99,7 @@ export const LoginPage = () => {
               value="rememberCredentials"
               onChange={handleInputChange}
             />
-            <label htmlFor="rememberCredentials">Remember My Credentials</label>
+            <label htmlFor="rememberCredentials">Recordar credenciales</label>
            
             <Button
               className="loginForm-submit"
@@ -107,7 +107,7 @@ export const LoginPage = () => {
               variant="primary"
               disabled={isButtonDisabled}
             >
-              Log in
+              Acceder
             </Button>
           </form>
 

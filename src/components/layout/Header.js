@@ -5,32 +5,29 @@ import classNames from 'classnames';
 // import AuthButton from '../auth/AuthButton';
 
 import './Header.css';
+import AuthButton from '../auth/AuthButton';
 export const Header = ({ className }) => {
     return (
         <header className={classNames('header', className)}>
-          <Link to="/">
+          <Link className="react-link" to="/">
             <div className="header-logo">
-              {/* <img src={logo} alt="Twitter-React"></img> */}
-              {/* <Icon width="32" height="32" /> */}
+              NodePop<span>React</span>
             </div>
           </Link>
           <nav className="header-nav">
-            <NavLink
-              to="/adverts/new"
-              // className={({ isActive }) => (isActive ? 'active' : '')}
-              style={({ isActive }) => (isActive ? { color: 'green' } : null)}
-            >
-              New Advertisement
-            </NavLink>
-            <NavLink
+            <NavLink className={classNames('react-link', 'custom-nav-link')}
               to="/adverts"
-              // className={({ isActive }) => (isActive ? 'active' : '')}
-              style={({ isActive }) => (isActive ? { color: 'green' } : null)}
               end
             >
-              See all advertisements
+              Todos los anuncios
             </NavLink>
-            {/* <AuthButton className="header-button" /> */}
+
+            <NavLink className={classNames('react-link', 'custom-nav-link')}
+              to="/adverts/new"             
+            >
+              Crear anuncio
+            </NavLink>
+            <AuthButton className={classNames('react-link', 'custom-nav-link')} />
           </nav>
         </header>
       );

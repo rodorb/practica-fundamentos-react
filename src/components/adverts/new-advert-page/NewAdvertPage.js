@@ -109,7 +109,7 @@ export const NewAdvertPage = ()=>{
         tags.length <=0;
 
     return (
-        <Page title="Create New Advertisement">
+        <Page >
             <div className="newAdvertPage bordered">
             <form className="loginForm" onSubmit={handleSubmit}>
                 <FormField

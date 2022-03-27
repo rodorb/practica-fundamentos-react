@@ -5,7 +5,8 @@ import App from './App';
 // import reportWebVitals from './reportWebVitals';
 import Storage from './shared/utils/Storage';
 import { BrowserRouter as Router } from 'react-router-dom';
-import ApiClient from './components/api-client/Client'
+import ApiClient from './components/api-client/Client';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const accessToken = Storage.get('auth');
 ApiClient.setAuthorizationHeader(accessToken);

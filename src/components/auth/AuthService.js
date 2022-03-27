@@ -12,6 +12,7 @@ class AuthService {
         return Promise.resolve().then(() => {
             ApiClient.removeAuthorizationHeader();
             Storage.remove('auth');
+            Storage.remove('credentialsCached');
         });
     }
 }

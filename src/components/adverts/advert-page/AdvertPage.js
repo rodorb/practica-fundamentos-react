@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { Page } from "../../layout/Page";
-import { Advert } from "../adverts-page/Advert";
 import AdvertsService from "../service/AdvertsService";
+import { AdvertDetail } from "./AdvertDetail";
 
 
 //  DONE??:  Detalle del anuncio cuyo id es recogido de la URL. Mostrará la foto del
@@ -45,7 +45,7 @@ export const AdvertPage = ()=>{
     }
 
     return (
-        <Page title="Advert Detail">
+        <Page>
             <div>
                 
                 {isLoading && (
@@ -53,7 +53,7 @@ export const AdvertPage = ()=>{
                 ...Loading - TODO: Spinner should be shown here
                 </div>
                 )}
-                { advert && !isLoading && <Advert {...advert} />}
+                { advert && !isLoading && <AdvertDetail {...advert} />}
 
 
                 {error && (
