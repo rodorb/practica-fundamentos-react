@@ -1,6 +1,7 @@
 .photo {
-  background-color: transparent;
-  border-radius: 9999px;
-  height: 48px;
-  width: 48px;
+    background-color: transparent;
+    border-radius: 0.5rem;
+    /* height: 30rem; */
+    max-height: fit-content;
+    max-width: 40rem;
 }

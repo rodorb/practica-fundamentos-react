@@ -4,6 +4,8 @@ import ButtonBootstrap from 'react-bootstrap/Button';
 import { MyVerticallyCenteredModal } from '../../../shared/components/ui-components/Modal';
 import AdvertsService from '../service/AdvertsService';
 import {  useNavigate } from 'react-router-dom';
+import './AdvertDetails.css'
+import defaultPhoto from '../../../assets/photo-not-found.jpg';
 
 export const AdvertDetail = ({  name, sale, price, tags, photo, id }) => {
   const [showModal, setShowModal] = useState(false);
@@ -33,25 +35,31 @@ export const AdvertDetail = ({  name, sale, price, tags, photo, id }) => {
   }
   return (
     <Fragment>
-      <article className="advert bordered">
-        <div className="left">
-          <Photo src={photo} className="advert-photo" />
+      <article className='ad-detail'>
+        <div className='left'>
+            <div>
+              <Photo src={photo? photo: defaultPhoto}/>
+            </div>
+            <div className='ad-container'>
+                <h1 className="ad-name">{name}</h1>
+                <p className="ad-sale">{sale? 'En venta': 'Se compra'}</p>
+                <p className="ad-price">{price}€</p>
+                <span>Etiquetas:</span>
+                <ul>
+                  {tags.map((tag, index)=>{
+                      return <li key={`${tag}-${index}`}>{tag}</li>
+                  })}
+                </ul>
+              
+            </div>
         </div>
-        <div className="right">
-          <div className="advert-header">
-            <p className="advert-name">{name}</p>
-            <p className="advert-price">{price}</p>
-            <p className="advert-sale">{sale? 'En venta': 'Se compra'}</p>
-          </div>
-          <ul>
-              {tags.map((tag, index)=>{
-                  return <li key={`${tag}-${index}`}>{tag}</li>
-              })}
-          </ul>
+        
+        <div className="delete-button">
+          <ButtonBootstrap size='lg' variant="primary" onClick={handleShowModal}>
+            Borrar anuncio
+          </ButtonBootstrap>
         </div>
-        <ButtonBootstrap variant="primary" onClick={handleShowModal}>
-          Borrar anuncio
-        </ButtonBootstrap>
+        
         { showModal &&
           <MyVerticallyCenteredModal 
           modalTitle="Borrar anuncio" 

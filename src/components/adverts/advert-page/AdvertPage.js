@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { Page } from "../../layout/Page";
 import AdvertsService from "../service/AdvertsService";
@@ -46,7 +46,7 @@ export const AdvertPage = ()=>{
 
     return (
         <Page>
-            <div>
+            <Fragment>
                 
                 {isLoading && (
                 <div>
@@ -61,7 +61,7 @@ export const AdvertPage = ()=>{
                     {error.message} - TODO: An error notification should be shown here
                     </div>
                 )}
-            </div>
+            </Fragment>
         </Page>
     );
 }

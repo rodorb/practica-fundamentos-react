@@ -1,0 +1,43 @@
+.ad-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5rem;
+    align-items: center;
+    background-color: aliceblue;
+    padding: 8rem;
+    margin: auto;
+    width: 100rem;
+}
+
+.ad-detail .left {
+    display: flex;
+    gap: 4rem;
+}
+
+.ad-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+}
+
+.ad-container p,
+.ad-container span,
+.ad-container ul {
+    font-size: 2.2rem;
+    font-weight: bolder;
+}
+
+.ad-container h1 {
+    font-size: 4rem;
+    font-weight: bolder;
+}
+
+.ad-container li {
+    font-size: 2rem;
+}
+
+.delete-button {}
