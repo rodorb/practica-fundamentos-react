@@ -5,6 +5,10 @@ import { FormField } from "../../shared/components/ui-components/FormField";
 import Storage from "../../shared/utils/Storage";
 import { useAuthContext } from "../auth/AuthContext"
 import AuthService from '../auth/AuthService'
+import { Page } from "../layout/Page";
+import './LoginPage.css'
+import ButtonBootstrap from 'react-bootstrap/Button';
+
 
 const credentialsCachedSessionName = 'credentialsCached';
 export const LoginPage = () => {
@@ -71,6 +75,7 @@ export const LoginPage = () => {
     const isButtonDisabled = !email || !password || isLoading;
 
     return (
+      <Page>
         <div className="loginPage">
           <h1 className="loginPage-title">Log in to Nodepop</h1>
           <form className="loginForm" onSubmit={handleFormSubmit}>
@@ -101,14 +106,13 @@ export const LoginPage = () => {
             />
             <label htmlFor="rememberCredentials">Recordar credenciales</label>
            
-            <Button
-              className="loginForm-submit"
-              type="submit"
-              variant="primary"
-              disabled={isButtonDisabled}
-            >
-              Acceder
-            </Button>
+
+
+            <div className="formButton">
+                <ButtonBootstrap size="lg" className="submit-form-button" variant="primary" type="submit" disabled={isButtonDisabled}>
+                  Acceder                   
+                </ButtonBootstrap>
+              </div>
           </form>
 
           {isLoading && (
@@ -124,6 +128,8 @@ export const LoginPage = () => {
           )}
 
         </div>
+      </Page> 
+        
       );
 
 }

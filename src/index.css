@@ -4,3 +4,37 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    margin: 0rem 10rem 2rem 9rem;
+    width: 40rem;
+    align-self: center;
+}
+
+form label {
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
+input[type=text],
+input[type=password],
+input[type=number],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    background-color: white;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+.submit-form-button {
+    align-self: center;
+}

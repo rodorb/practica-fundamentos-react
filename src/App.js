@@ -23,7 +23,9 @@ function App({isInitiallyLogged}) {
     <div className="App">
       <AuthContextProvider value={{isLoggedUser, handleLogin, handleLogout}}>
         <Routes>
-          <Route path='/login' element={ <LoginPage/>} />
+          <Route path='/login' element={  <Layout/>} >
+            <Route index element={<LoginPage/>}/>
+          </Route>
           <Route path='/adverts' element={
             <RequireAuth>
                 <Layout/>

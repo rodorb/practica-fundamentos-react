@@ -1,34 +1,40 @@
 .loginPage {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 40px;
-  max-width: 600px;
-  padding: 0 15px;
-  width: 100%;
+    padding: 3rem;
+    margin: 5rem;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .loginPage-title {
-  align-items: center;
-  display: flex;
-  height: 64px;
-  justify-content: center;
-  margin-bottom: 10px;
+    align-items: center;
+    display: flex;
+    height: 64px;
+    justify-content: center;
+    margin-bottom: 10px;
+    color: white;
 }
 
+
+/* 
+
+
 .loginPage-error {
-  background-color: rgb(224, 36, 94, 0.1);
-  border: 1px solid rgba(224, 36, 94, 0.2);
-  border-radius: 5px;
-  color: rgb(224, 36, 94);
-  margin-top: 20px;
-  padding: 10px 15px;
+    background-color: rgb(224, 36, 94, 0.1);
+    border: 1px solid rgba(224, 36, 94, 0.2);
+    border-radius: 5px;
+    color: rgb(224, 36, 94);
+    margin-top: 20px;
+    padding: 10px 15px;
 }
 
 .loginForm-field {
-  padding: 10px 0;
+    padding: 10px 0;
 }
 
 .loginForm-submit {
-  margin-top: 10px;
-  width: 100%;
-}
+    margin-top: 10px;
+    width: 100%;
+} */

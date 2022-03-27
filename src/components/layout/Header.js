@@ -6,7 +6,9 @@ import classNames from 'classnames';
 
 import './Header.css';
 import AuthButton from '../auth/AuthButton';
+import { useAuthContext } from '../auth/AuthContext';
 export const Header = ({ className }) => {
+  const { isLoggedUser} = useAuthContext();
     return (
         <header className={classNames('header', className)}>
           <Link className="react-link" to="/">
@@ -14,7 +16,7 @@ export const Header = ({ className }) => {
               NodePop<span>React</span>
             </div>
           </Link>
-          <nav className="header-nav">
+         { isLoggedUser && <nav className="header-nav">
             <NavLink className={classNames('react-link', 'custom-nav-link')}
               to="/adverts"
               end
@@ -28,7 +30,7 @@ export const Header = ({ className }) => {
               Crear anuncio
             </NavLink>
             <AuthButton className={classNames('react-link', 'custom-nav-link')} />
-          </nav>
+          </nav>}
         </header>
       );
 }

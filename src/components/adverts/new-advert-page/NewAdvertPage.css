@@ -1,0 +1,27 @@
+.newAdvertPage {
+    padding: 3rem;
+    margin: 5rem;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.newAdvertPage h1 {
+    text-align: center;
+    color: white;
+}
+
+.type-and-tags-container {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 2rem;
+}
+
+.formButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

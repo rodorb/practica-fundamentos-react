@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "../../../shared/components/ui-components/Button";
 import { FormField } from "../../../shared/components/ui-components/FormField";
 import { Page } from "../../layout/Page";
 import AdvertsService from "../service/AdvertsService";
+import ButtonBootstrap from 'react-bootstrap/Button';
+import './NewAdvertPage.css';
+
 
 // TODO: Formulario con TODOS los inputs necesarios para crear un nuevo
 // anuncio:
@@ -86,6 +88,8 @@ export const NewAdvertPage = ()=>{
         try{
             const formData = new FormData();
             for ( var key in newAdvertData ) {
+                newAdvertData[key]!== null &&
+                newAdvertData[key]!== undefined &&
                 formData.append(key, newAdvertData[key]);
             }
             const createdAdvert =  await AdvertsService.createAdvert(formData);
@@ -111,77 +115,87 @@ export const NewAdvertPage = ()=>{
     return (
         <Page >
             <div className="newAdvertPage bordered">
-            <form className="loginForm" onSubmit={handleSubmit}>
-                <FormField
-                    type="text"
-                    name="name"
-                    label="Nombre"
-                    className="loginForm-field"
-                    value={name}
-                    onChange={handleInputChange}
-                // ref={ref}
-                />
-                <FormField
-                    type="number"
-                    step='0.01'
-                    name="price"
-                    label="Precio"
-                    className="loginForm-field"
-                    value={price}
-                    onChange={handleInputChange}
-                />
-                <label>
+                <h1>Nuevo Anuncio</h1>
+                <form className="loginForm" onSubmit={handleSubmit}>
+                    <FormField
+                        type="text"
+                        name="name"
+                        label="Nombre"
+                        className="loginForm-field"
+                        value={name}
+                        onChange={handleInputChange}
+                    // ref={ref}
+                    />
+                    <FormField
+                        type="number"
+                        step='0.01'
+                        name="price"
+                        label="Precio"
+                        className="loginForm-field"
+                        value={price}
+                        onChange={handleInputChange}
+                    />
+                    <div className="type-and-tags-container">
+                        <label>
+                            <span>Etiquetas</span>
+                            { availableTags.length > 0 && (
+                                <select class="form-select" size="3" aria-label="multiple select example" name="tags" id="tags" multiple={true} onChange={handleInputChange}>
+                                    {availableTags.map((tag, idx)=>{
+                                        return <option key={idx} value={tag}>{tag}</option>
+                                    })}
+                                </select>
+                                )
+                            }
+                        </label>
+                    
+                        <div class="form-check">
+                            <label>Tipo anuncio</label>
+                            <div className="radio">
+                                <label>
+                                    <input className="form-check-input"
+                                        name="sale"
+                                        type="radio"
+                                        value="false"
+                                        checked={sale === false}
+                                        onChange={handleInputChange}
+                                    />
+                                    Se compra
+                                </label>
+                            </div>
+                            <div className="radio">
+                                <label>
+                                    <input  className="form-check-input"
+                                        name="sale"
+                                        type="radio"
+                                        value="true"
+                                        checked={sale === true}
+                                        onChange={handleInputChange}
+                                    />
+                                    En venta
+                                </label>
+                            </div> 
+                        </div>
+                    </div>
+                    
 
-                    { availableTags.length > 0 && (
-                        <select  name="tags" id="tags" multiple={true} onChange={handleInputChange}>
-                            {availableTags.map((tag, idx)=>{
-                                return <option key={idx} value={tag}>{tag}</option>
-                            })}
-                        </select>
-                        )
-                    }
-                </label>
-               
-
-                <div className="radio">
-                    <label>
+                    <div className="mb-3">
+                        <label for="formFile" class="form-label">Selecciona una foto para el anuncio</label>
                         <input
-                            name="sale"
-                            type="radio"
-                            value="false"
-                            checked={sale === false}
+                            class="form-control"
+                            name="photo"
+                            type="file"
+                            id="formFile"
                             onChange={handleInputChange}
                         />
-                        Se compra
-                    </label>
-                </div>
-                <div className="radio">
-                    <label>
-                        <input
-                            name="sale"
-                            type="radio"
-                            value="true"
-                            checked={sale === true}
-                            onChange={handleInputChange}
-                        />
-                        En venta
-                    </label>
-                </div>
-                <input
-                    name="photo"
-                    type="file"
-                    onChange={handleInputChange}
-                />
-
-                <Button
-                    className="loginForm-submit"
-                    type="submit"
-                    variant="primary"
-                    disabled={buttonDisabled}
-                >
-                    Crear Anuncio
-                </Button>
-            </form>
+                    </div>
+                    
+                    <div className="formButton">
+                        <ButtonBootstrap size="lg" className="submit-form-button" variant="primary" type="submit" disabled={buttonDisabled}>
+                            Crear Anuncio                    
+                        </ButtonBootstrap>
+                    </div>
+                    
+                </form>
             </div>
         </Page>
     );
