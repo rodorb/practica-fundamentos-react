@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux'
 import './index.css';
 import App from './App';
 // import reportWebVitals from './reportWebVitals';
@@ -7,14 +8,19 @@ import Storage from './shared/utils/Storage';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ApiClient from './components/api-client/Client';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import storeSetup from './store-redux';
 
 const accessToken = Storage.get('auth');
 ApiClient.setAuthorizationHeader(accessToken);
+const store = storeSetup({authentication: !!accessToken});
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <App isInitiallyLogged={!!accessToken} />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <App isInitiallyLogged={!!accessToken} />
+      </Router>
+    </Provider>
+    
   </React.StrictMode>,
   document.getElementById('root')
 );
