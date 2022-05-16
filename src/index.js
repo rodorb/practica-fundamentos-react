@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux'
 import './index.css';
 import App from './App';
@@ -12,11 +13,12 @@ import storeSetup from './store-redux';
 
 const accessToken = Storage.get('auth');
 ApiClient.setAuthorizationHeader(accessToken);
-const store = storeSetup({authentication: !!accessToken});
+const history = createBrowserHistory();
+const store = storeSetup({authentication: !!accessToken},{history} );
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
+      <Router history={history}>
         <App isInitiallyLogged={!!accessToken} />
       </Router>
     </Provider>

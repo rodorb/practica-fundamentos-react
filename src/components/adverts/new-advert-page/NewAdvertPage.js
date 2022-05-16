@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { FormField } from "../../../shared/components/ui-components/FormField";
 import { Page } from "../../layout/Page";
-import AdvertsService from "../service/AdvertsService";
 import ButtonBootstrap from 'react-bootstrap/Button';
 import './NewAdvertPage.css';
+import { useDispatch, useSelector } from "react-redux";
+import { getTags, getUi } from "../../../store-redux/selectors";
+import { advertCreation, allTags } from "../../../store-redux/actions";
 
 
 // TODO: Formulario con TODOS los inputs necesarios para crear un nuevo
@@ -19,6 +20,9 @@ import './NewAdvertPage.css';
 // desabiltando el submit hasta pasar todas las validaciones.
 // TODO: Tras la creaciónTras la creación del anuncio debería redireccionar a la página del anuncio.
 export const NewAdvertPage = ()=>{
+    const dispatch = useDispatch();
+    const availableTags = useSelector(getTags);
+    const { error, isLoading } = useSelector(getUi);
     const [newAdvertData, setNewAdvertData] = useState({
         name: '',
         sale: null,
@@ -26,28 +30,11 @@ export const NewAdvertPage = ()=>{
         tags: [],
         photo: null
     });
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [ availableTags, setAvailableTags ] = useState(["lifestyle","mobile","motor","work"])
-    const { name, sale, price, tags, photo } = newAdvertData;
-    const navigate = useNavigate();
-    const location = useLocation();
+    const { name, sale, price, tags } = newAdvertData;
 
     useEffect(() => {
-        (async()=>{
-            let errorValue;
-            setIsLoading(true)
-            try {
-                const tagsData = await AdvertsService.getTags();
-                setAvailableTags(tagsData);
-            } catch (error) {
-                errorValue = error;
-            }finally{
-                setIsLoading(false);
-                errorValue && setError(errorValue)
-            }
-        })();
-    }, []);
+        dispatch(allTags());
+    }, [dispatch]);
 
     const handleInputChange = (event) =>{
         const evtTarget = event?.target;
@@ -87,29 +74,32 @@ export const NewAdvertPage = ()=>{
     const handleSubmit = async (event) =>{
 
         event.preventDefault();
-        let errorValue = null;
-        let redirectTo;
-        setIsLoading(true);
-        
-        try{
-            const formData = new FormData();
-            for ( var key in newAdvertData ) {
-                newAdvertData[key]!== null &&
-                newAdvertData[key]!== undefined &&
-                formData.append(key, newAdvertData[key]);
-            }
-            const createdAdvert =  await AdvertsService.createAdvert(formData);
-            redirectTo = `/adverts/${createdAdvert?.id}`;
-        }catch(err){
-            errorValue = err;
-        }finally{
-            setIsLoading(false);
-            if(errorValue){
-                setError(errorValue);
-            }else{
-                redirectTo && navigate(redirectTo, { replace: true }); 
-            }  
+        const formData = new FormData();
+        for ( var key in newAdvertData ) {
+            newAdvertData[key]!== null &&
+            newAdvertData[key]!== undefined &&
+            formData.append(key, newAdvertData[key]);
         }
+        dispatch(advertCreation(formData));
+        // try{
+        //     const formData = new FormData();
+        //     for ( var key in newAdvertData ) {
+        //         newAdvertData[key]!== null &&
+        //         newAdvertData[key]!== undefined &&
+        //         formData.append(key, newAdvertData[key]);
+        //     }
+        //     const createdAdvert =  await AdvertsService.createAdvert(formData);
+        //     redirectTo = `/adverts/${createdAdvert?.id}`;
+        // }catch(err){
+        //     errorValue = err;
+        // }finally{
+        //     setIsLoading(false);
+        //     if(errorValue){
+        //         setError(errorValue);
+        //     }else{
+        //         redirectTo && navigate(redirectTo, { replace: true }); 
+        //     }  
+        // }
     }
 
     const buttonDisabled = 

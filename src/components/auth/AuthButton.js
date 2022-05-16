@@ -1,23 +1,18 @@
 import { NavLink } from 'react-router-dom';
-import AuthService  from './AuthService';
-import { useAuthContext } from './AuthContext';
 import { Fragment, useState } from 'react';
 import { MyVerticallyCenteredModal } from '../../shared/components/ui-components/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { getIsLogged } from '../../store-redux/selectors';
+import { logout } from '../../store-redux/actions';
 
 function AuthButton({ className }) {
-  const { isLoggedUser, handleLogout: onLogout } = useAuthContext();
+  const dispatch = useDispatch();
+  const isLoggedUser = useSelector(getIsLogged);
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
   const handleLogoutClick = async () => {
-    try {
-      await AuthService.logout();
-      onLogout();
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-    await AuthService.logout();
-    onLogout();
+    dispatch(logout());
   };
 
   return isLoggedUser? (
@@ -38,7 +33,7 @@ function AuthButton({ className }) {
   )
    : (
     <NavLink id='auth-button' className={className} to="/login" end>
-      Iniciar Sesiómn
+      Iniciar Sesión
     </NavLink>
   );
 }

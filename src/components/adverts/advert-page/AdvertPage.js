@@ -1,10 +1,12 @@
-import { Fragment, useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Fragment, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Page } from "../../layout/Page";
-import AdvertsService from "../service/AdvertsService";
 import { AdvertDetail } from "./AdvertDetail";
 import Spinner from 'react-bootstrap/Spinner';
 import Toast from 'react-bootstrap/Toast';
+import { useDispatch, useSelector } from "react-redux";
+import { getAdvert, getUi } from "../../../store-redux/selectors";
+import { advertisement } from "../../../store-redux/actions";
 
 
 //  DONE??:  Detalle del anuncio cuyo id es recogido de la URL. Mostrará la foto del
@@ -17,34 +19,13 @@ import Toast from 'react-bootstrap/Toast';
  
 export const AdvertPage = ()=>{
     const { advertId } = useParams() || '';
-    const [ advert, setAdvert ] = useState(null);
-    const [ error, setError ] = useState(null);
-    const [ isLoading, setIsLoading ] = useState(false);
+    const dispatch = useDispatch();
+    const advert = useSelector(getAdvert(advertId));
+    const { error, isLoading } = useSelector(getUi);
 
     useEffect(() => {
-        (async () => {
-            let errorValue = null;
-            setIsLoading(true);
-            try {
-                const advertData = await AdvertsService.getAdvert(advertId);
-                setAdvert(advertData);
-            } catch (error) {
-                errorValue = error;
-            } finally {
-                setIsLoading(false);
-                errorValue && setError(errorValue);
-            }
-        })();
-        
-    }, [advertId]);
-
-    if (error?.status === 401) {
-        return <Navigate to="/login" />;
-    }
-  
-    if (error?.status === 404) {
-        return <Navigate to="/404" />;
-    }
+        dispatch(advertisement(advertId))
+    }, [dispatch, advertId]);
 
     return (
         <Page>

@@ -8,6 +8,9 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import Spinner from 'react-bootstrap/Spinner';
 import Toast from 'react-bootstrap/Toast';
+import { useDispatch, useSelector } from "react-redux";
+import { getAdvertisements, getTags, getUi } from "../../../store-redux/selectors";
+import { advertisements, allTags } from "../../../store-redux/actions";
 
 
 
@@ -46,17 +49,14 @@ const EmptyAdvertsPage = () => {
     </div>)
 }
 export const AdvertsPage = ()=>{
-    const [adverts, setAdverts] = useState([]);
-    const [ availableTags, setAvailableTags ] = useState(["lifestyle","mobile","motor","work"])
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
-    //TODO: estado de slider, si se saca a  otro componente, mover tambien este estado
-    // const [ sliderState , setSliderState ] = useState({
-    //         min: 1,
-    //         max: 100,
-    //         step: 10,
-    //         value: 1
-    // });
+    const dispatch = useDispatch();
+    const adverts = useSelector(getAdvertisements);
+    const availableTags = useSelector(getTags);
+    const { isLoading, error } = useSelector(getUi);
+    // const [adverts, setAdverts] = useState([]);
+    // const [ availableTags, setAvailableTags ] = useState(["lifestyle","mobile","motor","work"])
+    // const [isLoading, setIsLoading] = useState(false);
+    // const [error, setError] = useState(null);
 
     //TODO: Filtros, Añadir un Botón para resetear los filtros y volver a mostrar todos los productos
     const [filters, setFilters] = useState({
@@ -77,25 +77,9 @@ export const AdvertsPage = ()=>{
     const ADVERT_TYPES = [ 'En venta', 'Se compra', 'Todos' ];
     //TODO: estado de slider, si se saca a  otro componente, mover tambien este estado
     useEffect(()=>{
-        (async ()=>{
-            let errorValue = null;
-            setIsLoading(true);
-            try {
-              const advertsData = await AdvertsService.getAllAdvertisements();
-              const tagsData = await AdvertsService.getTags();
-              setAvailableTags(tagsData); 
-              setAdverts(advertsData);  
-            } catch (error) {
-                errorValue = error;
-            }finally{
-                setIsLoading(false);
-                if(errorValue){
-                    setError(errorValue);
-                }
-            }
-        })();
-
-    }, []);
+        dispatch(advertisements());
+        dispatch(allTags());
+    }, [dispatch]);
 
 
     //TODO: funciones controladoras del cambio de slider

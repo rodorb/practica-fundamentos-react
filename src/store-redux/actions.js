@@ -1,4 +1,4 @@
-import { getAdvert, getAreAdvertisementsLoaded } from "./selectors";
+import { getAdvert, getAreAdvertisementsLoaded, getAreTagsLoaded } from "./selectors";
 import { ADVERTISEMENTS_FAILURE, ADVERTISEMENTS_REQUEST, ADVERTISEMENTS_SUCCESS, AD_CREATION_REQUEST, AD_CREATION_SUCCESS, AD_DELETION_REQUEST, AD_DELETION_SUCCESS, AD_REQUEST, AUTHENTICATION_LOGIN_FAILURE, AUTHENTICATION_LOGIN_REQUEST, AUTHENTICATION_LOGIN_SUCCESS, AUTHENTICATION_LOGOUT_SUCCESS, TAGS_FAILURE, TAGS_REQUEST, TAGS_SUCCESS, UI_RESET_ERROR } from "./types"
 
 ///LOGIN
@@ -77,7 +77,7 @@ export const advertisements = () => {
         const advertismentsLoaded = getAreAdvertisementsLoaded(_getState());
         if (advertismentsLoaded) return;
         try {
-            dispatch(advertsRequest);
+            dispatch(advertsRequest());
             const advertisements = await advertsService.getAllAdvertisements();
             dispatch(advertsSuccess(advertisements));
         } catch (error) {
@@ -231,6 +231,8 @@ export const tagsFailure = (error) => {
 export const allTags = () => {
     return async(dispatch, _getState, { api }) => {
         const { advertsService } = api;
+        const tagsLoaded = getAreTagsLoaded(_getState());
+        if (tagsLoaded) return;
         try {
             dispatch(tagsRequest());
             const tags = await advertsService.getTags();

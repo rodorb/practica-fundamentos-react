@@ -30,7 +30,7 @@ export const defaultState = {
         loaded: false
     },
     tags: {
-        data: [],
+        data: ["lifestyle", "mobile", "motor", "work"],
         loaded: false
     },
     ui: {
@@ -40,7 +40,7 @@ export const defaultState = {
 };
 
 export const authentication = (state = defaultState.authentication, action) => {
-    switch (action) {
+    switch (action.type) {
         case AUTHENTICATION_LOGIN_SUCCESS:
             return true;
         case AUTHENTICATION_LOGOUT_SUCCESS:
@@ -52,7 +52,7 @@ export const authentication = (state = defaultState.authentication, action) => {
 }
 
 export const advertisements = (state = defaultState.advertisements, action) => {
-    switch (action) {
+    switch (action.type) {
         case ADVERTISEMENTS_SUCCESS:
             return { loaded: true, data: action.payload };
         case AD_SUCCESS:
@@ -67,7 +67,7 @@ export const advertisements = (state = defaultState.advertisements, action) => {
 }
 
 export const tags = (state = defaultState.tags, action) => {
-    switch (action) {
+    switch (action.type) {
         case TAGS_SUCCESS:
             return { loaded: true, data: action.payload };
         default:
@@ -76,7 +76,7 @@ export const tags = (state = defaultState.tags, action) => {
 }
 
 export const ui = (state = defaultState.ui, action) => {
-    switch (action) {
+    switch (action.type) {
         case AUTHENTICATION_LOGIN_REQUEST:
         case ADVERTISEMENTS_REQUEST:
         case AD_CREATION_REQUEST:

@@ -9,23 +9,23 @@ import './LoginPage.css'
 import ButtonBootstrap from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Toast from 'react-bootstrap/Toast';
+import { login } from "../../store-redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { getUi } from "../../store-redux/selectors";
 
 
 
 const credentialsCachedSessionName = 'credentialsCached';
 export const LoginPage = () => {
+    const dispatch = useDispatch();
+    const { error, isLoading } = useSelector(getUi);
     const cachedCredentials = Storage.get(credentialsCachedSessionName);
     const { cachedEmail, cachedPassword, rememberCredentialsValue } = cachedCredentials || {} ;
-    const { handleLogin: onLogin } = useAuthContext();
-    const navigate = useNavigate();
-    const location = useLocation();
     const [userCredentials, setUserCredentials] = useState({
         email: cachedEmail ||'',
         password: cachedPassword || '',
         rememberCredentials: rememberCredentialsValue || false
     });
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
 
     const { email, password, rememberCredentials } = userCredentials;
 
@@ -53,24 +53,22 @@ export const LoginPage = () => {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        let errorValue = null;
-        let redirectTo;
-        setIsLoading(true);
-        try{
-            await AuthService.login(userCredentials);
-            onLogin();
-            handleRememberCredentialsCheckbox();
-            redirectTo = location.state?.redirectTo?.pathname || '/';
-        }catch(err){
-            errorValue = err;
-        }finally{
-            setIsLoading(false);
-            if(errorValue){
-                setError(errorValue);
-            }else{
-                redirectTo && navigate(redirectTo, { replace: true }); 
-            }  
-        }
+        dispatch(login(userCredentials));
+        // try{
+        //     await AuthService.login(userCredentials);
+        //     onLogin();
+        //     handleRememberCredentialsCheckbox();
+        //     redirectTo = location.state?.redirectTo?.pathname || '/';
+        // }catch(err){
+        //     errorValue = err;
+        // }finally{
+        //     setIsLoading(false);
+        //     if(errorValue){
+        //         setError(errorValue);
+        //     }else{
+        //         redirectTo && navigate(redirectTo, { replace: true }); 
+        //     }  
+        // }
 
     }
 
