@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Page } from "../../layout/Page";
-import AdvertsService from "../service/AdvertsService";
 import './AdvertsPage.css';
 import { Advert } from "./Advert";
 import Slider from 'rc-slider';
@@ -10,7 +9,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Toast from 'react-bootstrap/Toast';
 import { useDispatch, useSelector } from "react-redux";
 import { getAdvertisements, getTags, getUi } from "../../../store-redux/selectors";
-import { advertisements, allTags } from "../../../store-redux/actions";
+import { advertisements, allTags, uiResetError } from "../../../store-redux/actions";
 
 
 
@@ -251,7 +250,7 @@ export const AdvertsPage = ()=>{
                 )}
 
                 {error && !isLoading && (
-                    <Toast bg="danger">
+                    <Toast bg="danger" onClose={() => dispatch(uiResetError())}>
                     <Toast.Header>
                       <strong className="me-auto">Error</strong>
                     </Toast.Header>

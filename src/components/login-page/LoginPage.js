@@ -5,7 +5,7 @@ import './LoginPage.css'
 import ButtonBootstrap from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Toast from 'react-bootstrap/Toast';
-import { login } from "../../store-redux/actions";
+import { login, uiResetError } from "../../store-redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { getUi } from "../../store-redux/selectors";
 
@@ -92,12 +92,12 @@ export const LoginPage = () => {
           )}
 
           {error && (
-            <Toast bg="danger">
-            <Toast.Header>
-              <strong className="me-auto">Error</strong>
-            </Toast.Header>
-            <Toast.Body>Se ha producido un error en la aplicación.</Toast.Body>
-          </Toast>
+            <Toast bg="danger" onClose={() => dispatch(uiResetError())}>
+              <Toast.Header>
+                <strong className="me-auto">Error</strong>
+              </Toast.Header>
+              <Toast.Body>Se ha producido un error en la aplicación.</Toast.Body>
+            </Toast>
           )}
 
         </div>

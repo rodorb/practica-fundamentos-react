@@ -6,7 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Toast from 'react-bootstrap/Toast';
 import { useDispatch, useSelector } from "react-redux";
 import { getAdvert, getUi } from "../../../store-redux/selectors";
-import { advertisement } from "../../../store-redux/actions";
+import { advertisement, uiResetError } from "../../../store-redux/actions";
 
 
 //  DONE??:  Detalle del anuncio cuyo id es recogido de la URL. Mostrará la foto del
@@ -40,7 +40,7 @@ export const AdvertPage = ()=>{
 
 
                 {error && (
-                    <Toast bg="danger">
+                    <Toast bg="danger" onClose={() => dispatch(uiResetError())}>
                     <Toast.Header>
                       <strong className="me-auto">Error</strong>
                     </Toast.Header>

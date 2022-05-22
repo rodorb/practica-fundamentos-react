@@ -8,7 +8,7 @@ import defaultPhoto from '../../../assets/photo-not-found.jpg';
 import Toast from 'react-bootstrap/Toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUi } from '../../../store-redux/selectors';
-import { advertDeletion } from '../../../store-redux/actions';
+import { advertDeletion, uiResetError } from '../../../store-redux/actions';
 
 
 export const AdvertDetail = ({  name, sale, price, tags, photo, id }) => {
@@ -65,7 +65,7 @@ export const AdvertDetail = ({  name, sale, price, tags, photo, id }) => {
       )}
 
       {error && (
-        <Toast bg="danger">
+        <Toast bg="danger" onClose={() => dispatch(uiResetError())}>
         <Toast.Header>
           <strong className="me-auto">Error</strong>
         </Toast.Header>
