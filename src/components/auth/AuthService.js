@@ -4,7 +4,9 @@ class AuthService {
     login({ rememberCredentials, ...credentials }) {
         return ApiClient.client.post('/api/auth/login', credentials).then(({ accessToken }) => {
             ApiClient.setAuthorizationHeader(accessToken);
-            Storage.set('auth', accessToken);
+            if (rememberCredentials) {
+                Storage.set('auth', accessToken);
+            }
         });
     }
 

@@ -1,5 +1,5 @@
 import { getAdvert, getAreAdvertisementsLoaded, getAreTagsLoaded } from "./selectors";
-import { ADVERTISEMENTS_FAILURE, ADVERTISEMENTS_REQUEST, ADVERTISEMENTS_SUCCESS, AD_CREATION_REQUEST, AD_CREATION_SUCCESS, AD_DELETION_REQUEST, AD_DELETION_SUCCESS, AD_REQUEST, AUTHENTICATION_LOGIN_FAILURE, AUTHENTICATION_LOGIN_REQUEST, AUTHENTICATION_LOGIN_SUCCESS, AUTHENTICATION_LOGOUT_SUCCESS, TAGS_FAILURE, TAGS_REQUEST, TAGS_SUCCESS, UI_RESET_ERROR } from "./types"
+import { ADVERTISEMENTS_FAILURE, ADVERTISEMENTS_REQUEST, ADVERTISEMENTS_SUCCESS, AD_CREATION_REQUEST, AD_CREATION_SUCCESS, AD_DELETION_REQUEST, AD_DELETION_SUCCESS, AD_FAILURE, AD_REQUEST, AD_SUCCESS, AUTHENTICATION_LOGIN_FAILURE, AUTHENTICATION_LOGIN_REQUEST, AUTHENTICATION_LOGIN_SUCCESS, AUTHENTICATION_LOGOUT_SUCCESS, TAGS_FAILURE, TAGS_REQUEST, TAGS_SUCCESS, UI_RESET_ERROR } from "./types"
 
 ///LOGIN
 export const loginRequest = () => {
@@ -30,7 +30,6 @@ export const login = (credentials) => {
         try {
             await authService.login(credentials);
             dispatch(loginSucces());
-            //TODO: hacer la redireccion
         } catch (error) {
             dispatch(loginFailure(error));
         }
@@ -97,21 +96,21 @@ export const advertRequest = () => {
 
 export const advertSuccess = (advert) => {
     return {
-        type: AD_REQUEST,
+        type: AD_SUCCESS,
         payload: advert
     }
 };
 
 export const advertFailure = (error) => {
     return {
-        type: AD_REQUEST,
+        type: AD_FAILURE,
         payload: error,
         error: true
     }
 };
 
 export const advertisement = (advertId) => {
-    return (dispatch, _getState, { api }) => {
+    return async(dispatch, _getState, { api }) => {
         const { advertsService } = api;
         //Lógica apra que solo haga la llamad al API cuando se recargue la pagina,
         //no cuando vaya del lsitado de anuncios al detalle de unanuncio que ya se encuentra
@@ -120,7 +119,7 @@ export const advertisement = (advertId) => {
         if (advertLoaded) return;
         try {
             dispatch(advertRequest());
-            const advert = advertsService.getAdvert(advertId);
+            const advert = await advertsService.getAdvert(advertId);
             dispatch(advertSuccess(advert))
 
         } catch (error) {

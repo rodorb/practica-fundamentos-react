@@ -56,11 +56,11 @@ export const advertisements = (state = defaultState.advertisements, action) => {
         case ADVERTISEMENTS_SUCCESS:
             return { loaded: true, data: action.payload };
         case AD_SUCCESS:
-            return { loaded: true, data: [...state.data, action.payload] };
+            return { data: [...state.data, action.payload] };
         case AD_CREATION_SUCCESS:
-            return { loaded: true, data: [action.payload, ...state.data] }; //para que el anuncio creado esté en primera posicion en el listado
+            return { data: [action.payload, ...state.data] }; //para que el anuncio creado esté en primera posicion en el listado
         case AD_DELETION_SUCCESS:
-            return { loaded: true, data: state.data.filter((ad) => { return ad.id !== action.payload }) }; //en el payload devolvere el id del anuncio borrado
+            return { data: state.data.filter((ad) => { return ad.id !== action.payload }) }; //en el payload devolvere el id del anuncio borrado
         default:
             return state;
     }

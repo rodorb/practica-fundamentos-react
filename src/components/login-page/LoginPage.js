@@ -1,9 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { FormField } from "../../shared/components/ui-components/FormField";
-import Storage from "../../shared/utils/Storage";
-import { useAuthContext } from "../auth/AuthContext"
-import AuthService from '../auth/AuthService'
 import { Page } from "../layout/Page";
 import './LoginPage.css'
 import ButtonBootstrap from 'react-bootstrap/Button';
@@ -15,60 +11,32 @@ import { getUi } from "../../store-redux/selectors";
 
 
 
-const credentialsCachedSessionName = 'credentialsCached';
 export const LoginPage = () => {
     const dispatch = useDispatch();
     const { error, isLoading } = useSelector(getUi);
-    const cachedCredentials = Storage.get(credentialsCachedSessionName);
-    const { cachedEmail, cachedPassword, rememberCredentialsValue } = cachedCredentials || {} ;
+   
     const [userCredentials, setUserCredentials] = useState({
-        email: cachedEmail ||'',
-        password: cachedPassword || '',
-        rememberCredentials: rememberCredentialsValue || false
+        email: '',
+        password:  '',
+        rememberCredentials:  false
     });
 
     const { email, password, rememberCredentials } = userCredentials;
 
-    const handleInputChange = (event) => {
-        const evtTarget = event?.target;
+    const handleInputChange = ({ target: { value, name, type, checked } }) => {
+        // const evtTarget = event?.target;
         setUserCredentials(credentials => ({
             ...credentials,
-            [evtTarget.name]: evtTarget.type === 'checkbox' ?
-            evtTarget.checked : evtTarget.value
+            [name]: type === 'checkbox' ?
+            checked : value
         }))
     };
 
-    const handleRememberCredentialsCheckbox=() => {
-        if (rememberCredentials ) {
-            !cachedCredentials && 
-            Storage.set(credentialsCachedSessionName, 
-                {   cachedEmail: email, 
-                    cachedPassword: password, 
-                    rememberCredentialsValue: true 
-                });
-        } else if(!rememberCredentials) {
-            Storage.remove(credentialsCachedSessionName);
-        }
-    };
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         dispatch(login(userCredentials));
-        // try{
-        //     await AuthService.login(userCredentials);
-        //     onLogin();
-        //     handleRememberCredentialsCheckbox();
-        //     redirectTo = location.state?.redirectTo?.pathname || '/';
-        // }catch(err){
-        //     errorValue = err;
-        // }finally{
-        //     setIsLoading(false);
-        //     if(errorValue){
-        //         setError(errorValue);
-        //     }else{
-        //         redirectTo && navigate(redirectTo, { replace: true }); 
-        //     }  
-        // }
+        
 
     }
 
